@@ -1,0 +1,58 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+
+\title{Rudy, a small web server}
+
+\author{Oskar Olofsson}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+This lab aims to understand the basic structure of a web server in Erlang.
+
+\section{Socket API}
+A socket API is consisting of libraries for handling Berkeley Sockets, which are abstractions that make handling connections over the Internet simpler for programmers. A socket is made up of an IP address and a port number.
+
+The missing pieces of the socket API consisted calling handler(Listen) from init, calling request(Client) from handler and parsing the request in request. As well as defining the reply text, were I responded with the URI requested.
+
+\section{Server process}
+A server process is a machine process, that is listening for incoming requests on a certain port. It has defined instructions for handling the request and generating a response.
+
+\section{HTTP}
+The HTTP module is consisting of functions for parsing requests requesting lines, uris and defining versions. As of HTTP 1.1...
+
+\section{Evaluation}
+Measuring the time with different sleep times for 100 requests resulted in:
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+    Sleep time (s) & Benchmark time (s) \\ \hline
+    0.01 & 1.19 \\ \hline
+    0.02 & 2.20 \\ \hline
+    0.04 & 4.19 \\ \hline
+    0.08 & 8.20 \\ \hline
+    0.16 & 16.20 \\
+    \hline
+    \end{tabular}
+\end{center}
+
+We can se that we have around 0.2 s actual delay in all cases (0.002 per request). This makes the delay significant for all cases. At 0.04 s delay time as in our program, every request takes 0.0419 s. We can make at most 1 / 0.0419 = 23.8, 23 requests per second.
+
+\section{Improvements}
+Possible improvements  include using multi-threaded extensions. Creating a new process for every request is an alternative. An other alternative is to create a new thread for every request, which is cheaper than creating a new process. According to the course literature: Distributed systems, Concepts and design. It takes about 11 milliseconds to create a new UNIX process and about 1 millisecond to create a new thread, this was done using a CVAX processor running the Topaz kernel.
+
+To know how long the body is you could look at the content-length parameter. Or if the client sends a message with the parameter: Transfer-Encoding: Chunked, it will have to be parsed until it finds a chunk with length 0.
+
+\section{Conclusion}
+This lab was a good introduction to server based Erlang programming.
+
+\end{document}
