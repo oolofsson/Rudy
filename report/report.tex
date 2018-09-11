@@ -5,6 +5,7 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage[colorinlistoftodos]{todonotes}
+\usepackage{enumerate}
 
 \title{Rudy, a small web server}
 
@@ -21,13 +22,20 @@ This lab aims to understand the basic structure of a web server in Erlang.
 \section{Socket API}
 A socket API is consisting of libraries for handling Berkeley Sockets, which are abstractions that make handling connections over the Internet simpler for programmers. A socket is made up of an IP address and a port number.
 
-The missing pieces of the socket API consisted calling handler(Listen) from init, calling request(Client) from handler and parsing the request in request. As well as defining the reply text, were I responded with the URI requested.
-
 \section{Server process}
-A server process is a machine process, that is listening for incoming requests on a certain port. It has defined instructions for handling the request and generating a response.
+A server process is a process waiting for incoming requests, it includes the procedures for handling the requests and send back a response accordingly. A server module Rudy was implemented as specified with procedures:
+
+\begin{itemize}
+\item init(Port) which init a listening socket for passing to the handler function.
+\item handler(Listen) uses the socket for listening for incoming requests
+\item request(Client) parses the request using the http module.
+\item reply(Request) replies to the request with the URI as argument.
+\end{itemize}
 
 \section{HTTP}
-The HTTP module is consisting of functions for parsing requests requesting lines, uris and defining versions. As of HTTP 1.1...
+HTTP v1.1 is specified as a stateless application level protocol for distributed, collaborative, hypermedia information systems as specified by RFC 2616
+
+The HTTP module is consisting of functions for parsing requests. The parser is set up to split the request into the parts request-line, body and headers. In the implementation we are recursively going through the string looking for characters marking the end.
 
 \section{Evaluation}
 Measuring the time with different sleep times for 100 requests resulted in:

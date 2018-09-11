@@ -11,7 +11,7 @@ init(Port) ->
     Opt = [list, {active, false}, {reuseaddr, true}],
     case gen_tcp:listen(Port, Opt) of
 	{ok, Listen} ->
-	    handler(Listen),			%: to be filled in
+	    handler(Listen), %: to be filled in
 	    gen_tcp:close(Listen),
 	    ok;
 	{error, Error} ->
@@ -21,7 +21,7 @@ init(Port) ->
 handler(Listen) ->
     case gen_tcp:accept(Listen) of
 	{ok, Client} ->
-	    request(Client),			%: to be filled in
+	    request(Client), %: to be filled in
 	    handler(Listen);
 	{error, Error} ->
 	    error
@@ -31,7 +31,7 @@ request(Client) ->
     Recv = gen_tcp:recv(Client, 0),
     case Recv of
 	{ok, Str} ->
-	    Request = http:parse_request(Str),		%: to be filled in
+	    Request = http:parse_request(Str), %: to be filled in
 	    Response = reply(Request),
 	    gen_tcp:send(Client, Response);
 	{error, Error} ->
@@ -41,4 +41,4 @@ request(Client) ->
 
 reply({{get, URI, _}, _, _}) ->
     timer:sleep(160),
-    http:ok(URI).		      	%: to be filled in
+    http:ok(URI). %: to be filled in
